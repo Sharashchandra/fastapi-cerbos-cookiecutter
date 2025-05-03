@@ -1,0 +1,25 @@
+import asyncio
+from datetime import datetime, timezone
+
+from src.core.security.passwords import Password
+from src.database.session import AsyncSessionLocal
+from src.users.models import User
+
+
+async def create_admin_user():
+    async with AsyncSessionLocal() as session:
+        user = User(
+            email="admin@example.com",
+            password=Password.get_hashed_password("admin"),
+            full_name="Admin User",
+            is_active=True,
+            is_mfa_enabled=False,
+            email_verified=True,
+            last_login=datetime.now(timezone.utc),
+        )
+        session.add(user)
+        await session.commit()
+
+
+if __name__ == "__main__":
+    asyncio.run(create_admin_user())

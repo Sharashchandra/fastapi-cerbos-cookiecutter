@@ -1,0 +1,70 @@
+x-app-common:
+  &app-common
+  build:
+    context: .
+    dockerfile: docker/Dockerfile
+  env_file:
+    - .env
+  volumes:
+    - ./:/app
+
+services:
+  app:
+    <<: *app-common
+    command: tail -f /dev/null
+    # command: python runserver.py
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+      - redis
+      - worker
+
+  postgres:
+    image: postgres:17.2
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  
+  redis:
+    image: redis:7.4.1
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 50
+    volumes:
+      - redis_volume:/data
+    expose:
+      - 6379:6379
+  
+  worker:
+    <<: *app-common
+    command: ["rq", "worker", "--with-scheduler",  "--url", "redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_TASK_QUEUE_DB}"]
+    depends_on:
+      - redis
+  
+  cerbos:
+    image: cerbos/cerbos:latest
+    restart: always
+    ports:
+      - "3592:3592"
+    volumes:
+      - ./cerbos/policies:/policies
+      - ./cerbos/cerbos.yaml:/cerbos.yaml
+    command: server --config=/cerbos.yaml
+    # command: compile /policies
+
+
+volumes:
+  postgres_data:
+  redis_volume:

@@ -1,0 +1,33 @@
+[project]
+name = "fastapi-cerbos-cookiecutter"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.15.2",
+    "alembic-postgresql-enum>=1.7.0",
+    "asyncpg>=0.30.0",
+    "bcrypt>=4.3.0",
+    "boto3>=1.37.37",
+    "cerbos>=0.12.0",
+    "fastapi>=0.115.12",
+    "gunicorn>=23.0.0",
+    "jinja2>=3.1.6",
+    "loguru>=0.7.3",
+    "orjson>=3.10.16",
+    "pydantic-settings>=2.9.1",
+    "pydantic[email]>=2.11.3",
+    "pyjwt>=2.10.1",
+    "rq-dashboard-fast>=0.5.12",
+    "sqlalchemy>=2.0.40",
+    "uvicorn>=0.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "ipdb>=0.13.13",
+    "ipython>=9.1.0",
+    "pre-commit>=4.2.0",
+    "ruff>=0.11.6",
+]

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your OTP Code</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+        }
+        .token {
+            font-size: 32px;
+            font-weight: bold;
+            color: #007bff;
+            letter-spacing: 5px;
+            margin: 20px 0;
+        }
+        .expiry-notice {
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your One-Time Password</h1>
+        <p>Here's your OTP code to complete the login process:</p>
+        <div class="token">{{ token }}</div>
+        <p class="expiry-notice">This code is valid for {{ expiry_minutes }} minutes.</p>
+        {% if reset_password_url -%}
+        <p>If you didn't request this code, please click <a href="{{ reset_password_url }}">here</a> to reset your password.</p>
+        {%- endif -%}
+    </div>
+</body>
+</html>
