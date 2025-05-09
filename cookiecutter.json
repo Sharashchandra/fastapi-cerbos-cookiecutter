@@ -1,0 +1,7 @@
+{
+    "project_name": "FastAPI Cerbos Cookiecutter",
+    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-') }}",
+    "author_email": "user@example.com",
+    "author_name": "User Name",
+    "description": "A FastAPI application with Cerbos integration"
+}
