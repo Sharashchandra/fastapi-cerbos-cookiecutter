@@ -68,7 +68,15 @@ class ResourceActions(str, Enum):
 
 ## Running the Application
 
-Start the application using docker-compose:
+1. Update the packages to the latest version in `pyproject.toml`
+
+2. Generate the lock file using uv:
+
+```bash
+uv lock
+```
+
+3. Start the application using docker-compose:
 
 ```bash
 docker-compose up -d
