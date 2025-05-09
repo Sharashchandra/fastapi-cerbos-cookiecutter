@@ -1,6 +1,5 @@
 from functools import lru_cache
 
-import pydantic
 from pydantic import AnyHttpUrl, EmailStr, PostgresDsn, SecretStr, field_validator
 from pydantic_core.core_schema import FieldValidationInfo
 from pydantic_settings import BaseSettings as PydanticBaseSettings
@@ -19,8 +18,8 @@ class BaseConfig(PydanticBaseSettings):
 class GeneralConfig(BaseConfig):
     PROJECT_NAME: str = "FastAPI Cerbos Cookiecutter"
 
-    # the endpoint for api docs and all endpoints
-    API_URL: str = "/api"
+    # the endpoint prefix for api docs and all endpoints
+    API_PREFIX: str = "/api"
 
     # List of allowed CORS origins
     ALLOWED_CORS_ORIGINS: list[AnyHttpUrl] = []
@@ -128,22 +127,21 @@ class CerbosConfig(BaseConfig):
         return f"{values.get('CERBOS_HOST')}:{values.get('CERBOS_PORT')}"
 
 
-@lru_cache
-def get_config() -> BaseConfig:
-    config = pydantic.create_model(
-        "Config",
-        __base__=(
-            GeneralConfig,
-            DatabaseConfig,
-            SMTPConfig,
-            RedisConfig,
-            SecurityTokenConfig,
-            MFAConfig,
-            CerbosConfig,
-        ),
-    )
+class Config(
+    GeneralConfig,
+    DatabaseConfig,
+    SMTPConfig,
+    RedisConfig,
+    SecurityTokenConfig,
+    MFAConfig,
+    CerbosConfig,
+):
+    pass
 
-    return config()
+
+@lru_cache
+def get_config() -> Config:  # Return the specific Config type
+    return Config()
 
 
 config = get_config()

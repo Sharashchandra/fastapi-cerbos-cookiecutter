@@ -9,6 +9,11 @@ from sqlalchemy.types import TIMESTAMP
 
 
 class Base(DeclarativeBase):
+    def json(self, exclude_unset: bool = False, exclude: list = None):
+        from fastapi.encoders import jsonable_encoder
+
+        return jsonable_encoder(self, exclude=exclude, exclude_unset=exclude_unset)
+
     def dict(self, exclude_unset: bool = False, exclude: list = None):
         if exclude is None:
             exclude = []

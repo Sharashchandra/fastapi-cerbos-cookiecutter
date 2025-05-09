@@ -3,11 +3,11 @@ from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import ForeignKey, func
-from sqlalchemy.dialects.postgresql import ENUM
+from sqlalchemy.dialects.postgresql import ARRAY, ENUM
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.types import TIMESTAMP
 
-from src.core.constants import TokenType
+from src.core.constants import TokenType, UserRoles
 from src.database.base_class import Base, relationship
 
 
@@ -32,6 +32,8 @@ class User(Base):
     updated_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), nullable=False, server_default=func.now(), server_onupdate=func.now()
     )
+
+    assigned_roles: Mapped[list] = mapped_column(ARRAY(ENUM(UserRoles, create_type=True)), nullable=False)
 
     active_mfa_attempt: Mapped[Optional["MFAAttempt"]] = relationship(
         back_populates="user",

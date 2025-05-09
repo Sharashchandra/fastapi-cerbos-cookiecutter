@@ -31,3 +31,35 @@ class TokenType(str, Enum):
     ACCESS = "access"
     REFRESH = "refresh"
     RESET_PASSWORD = "reset_password"
+
+
+class UserRoles(str, Enum):
+    """
+    An enumeration representing the various roles that a user can have.
+    Attributes:
+        ADMIN: Represents an administrator role.
+        USER: Represents a user role.
+    """
+
+    ADMIN = "admin"
+    EDITOR = "editor"
+    VIEWER = "viewer"
+    USER = "user"
+
+
+class ResourceActions(str, Enum):
+    """
+    An enumeration representing the various actions that can be performed on resources.
+    Attributes:
+        LIST: Represents the action of listing resources.
+        GET: Represents the action of reading an existing resource.
+        CREATE: Represents the action of creating a new resource.
+        UPDATE: Represents the action of updating an existing resource.
+        DELETE: Represents the action of deleting an existing resource.
+    """
+
+    LIST = "list"
+    GET = "get"
+    CREATE = "create"
+    UPDATE = "update"
+    DELETE = "delete"
