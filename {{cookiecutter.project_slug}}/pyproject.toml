@@ -1,7 +1,10 @@
 [project]
-name = "fastapi-cerbos-cookiecutter"
+name = "{{cookiecutter.project_slug}}"
 version = "0.1.0"
-description = "Add your description here"
+description = "{{cookiecutter.description}}"
+authors = [
+    {"name": "{{cookiecutter.author_name}}", "email": "{{cookiecutter.author_email}}"}
+]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

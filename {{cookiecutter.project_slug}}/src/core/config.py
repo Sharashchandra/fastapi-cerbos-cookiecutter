@@ -16,7 +16,7 @@ class BaseConfig(PydanticBaseSettings):
 
 
 class GeneralConfig(BaseConfig):
-    PROJECT_NAME: str = "FastAPI Cerbos Cookiecutter"
+    PROJECT_NAME: str = "{{cookiecutter.project_name}}"
 
     # the endpoint prefix for api docs and all endpoints
     API_PREFIX: str = "/api"
