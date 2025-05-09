@@ -3,32 +3,45 @@
 
 apiVersion: api.cerbos.dev/v1
 resourcePolicy:
-  resource: basicResource
+  resource: users
   version: default
   rules:
     - actions:
         - create
       effect: EFFECT_ALLOW
       roles:
-        - user
-        - admin
-    - actions:
-        - read
-      effect: EFFECT_ALLOW
-      roles:
-        - user
         - admin
     - actions:
         - update
       effect: EFFECT_ALLOW
       roles:
-        - user
         - admin
+        - user
+        - editor
     - actions:
         - delete
       effect: EFFECT_ALLOW
       roles:
         - admin
+    - actions:
+        - list
+      effect: EFFECT_ALLOW
+      roles:
+        - admin
+        - viewer
+        - editor
+    - actions:
+        - get
+      effect: EFFECT_DENY
+      roles:
+        - user
+    - actions:
+        - get
+      effect: EFFECT_ALLOW
+      roles:
+        - admin
+        - viewer
+        - editor
 
     # This is an example of using conditions for attribute-based access control
     # The action is only allowed if the principal ID matches the ownerId attribute

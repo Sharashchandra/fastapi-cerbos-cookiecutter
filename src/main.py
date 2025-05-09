@@ -12,8 +12,8 @@ from src.core.routers.api import router_with_auth, router_without_auth
 
 app = FastAPI(
     title=config.PROJECT_NAME,
-    openapi_url=f"{config.API_URL}/openapi.json",
-    docs_url=f"{config.API_URL}/docs",
+    openapi_url=f"{config.API_PREFIX}/openapi.json",
+    docs_url=f"{config.API_PREFIX}/docs",
     debug=config.ENVIRONMENT == Environment.LOCAL,
     default_response_class=DefaultResponse,
     lifespan=lifespan,
@@ -40,5 +40,5 @@ if config.ALLOWED_CORS_ORIGINS:
         expose_headers=["X-Process-Time"],
     )
 
-app.include_router(router_without_auth, prefix=config.API_URL)
-app.include_router(router_with_auth, prefix=config.API_URL)
+app.include_router(router_without_auth, prefix=config.API_PREFIX)
+app.include_router(router_with_auth, prefix=config.API_PREFIX)

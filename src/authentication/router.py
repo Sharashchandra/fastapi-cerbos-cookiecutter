@@ -13,6 +13,8 @@ from src.authentication.schemas import (
 from src.authentication.services.authentication import AuthenticationService
 from src.core.security.dependencies import verify_http_token, verify_reset_password_token
 from src.database.dependencies import get_db
+from src.users.dependencies import get_current_user
+from src.users.models import User
 
 authentication_router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -38,10 +40,10 @@ async def verify_token(token_data: VerifyTokenSchema, db: AsyncSession = Depends
 @authentication_router.post("/refresh/", status_code=status.HTTP_200_OK)
 async def refresh_token(
     refresh_token_data: RefreshTokenSchema,
-    token_payload: dict = Depends(verify_http_token),
+    user: User = Depends(get_current_user),
 ) -> dict:
     return await AuthenticationService.reissue_access_token(
-        user_id=token_payload["user_id"],
+        user=user,
         refresh_token=refresh_token_data.refresh_token,
     )
 

@@ -35,7 +35,7 @@ class AuthenticationHelper:
     def generate_reset_password_link(user: User) -> str:
         reset_password_token = Tokens.create_reset_password_token(data={"email": user.email})
 
-        base_url = os.path.join(config.PROJECT_BASE_URL.unicode_string(), config.API_URL)
+        base_url = os.path.join(config.PROJECT_BASE_URL.unicode_string(), config.API_PREFIX)
         reset_password_url = os.path.join(base_url, f"auth/set-password/?token={reset_password_token}")
 
         return reset_password_url
@@ -60,7 +60,7 @@ class AuthenticationHelper:
     @staticmethod
     async def blacklist_token(db: AsyncSession, user_id: UUID, token: str, token_type: TokenType):
         await AuthenticationHelper.blacklist_token_in_db(db, user_id=user_id, token=token, token_type=token_type)
-        await AuthenticationHelper.blacklist_token_in_cache(token=token, token_type=token_type)
+        AuthenticationHelper.blacklist_token_in_cache(token=token, token_type=token_type)
 
 
 class AuthenticationService(AuthenticationHelper):
@@ -107,12 +107,12 @@ class AuthenticationService(AuthenticationHelper):
         return cls.generate_tokens(user=user)
 
     @classmethod
-    async def reissue_access_token(cls, user_id: UUID, refresh_token: str) -> dict:
+    async def reissue_access_token(cls, user: User, refresh_token: str) -> dict:
         cache_key = f"blacklist:{TokenType.REFRESH.value}:{refresh_token}"
         if cache.get(cache_key):
             raise TokenExpiredException()
 
-        return cls.generate_tokens(user_id=user_id, issue_refresh_token=False)
+        return cls.generate_tokens(user=user, issue_refresh_token=False)
 
     @classmethod
     async def init_reset_password(cls, db: AsyncSession, email: str) -> dict:

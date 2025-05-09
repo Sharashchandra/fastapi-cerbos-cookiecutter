@@ -19,6 +19,7 @@ services:
       - postgres
       - redis
       - worker
+      - cerbos
 
   postgres:
     image: postgres:17.2
@@ -52,16 +53,21 @@ services:
     command: ["rq", "worker", "--with-scheduler",  "--url", "redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_TASK_QUEUE_DB}"]
     depends_on:
       - redis
+      - postgres
   
   cerbos:
     image: cerbos/cerbos:latest
     restart: always
     ports:
       - "3592:3592"
+      - "3593:3593"
     volumes:
-      - ./cerbos/policies:/policies
-      - ./cerbos/cerbos.yaml:/cerbos.yaml
+      - ./authz/policies:/policies
+      - ./authz/cerbos.yaml:/cerbos.yaml
     command: server --config=/cerbos.yaml
+    depends_on:
+      - redis
+      - postgres
     # command: compile /policies
 
 
